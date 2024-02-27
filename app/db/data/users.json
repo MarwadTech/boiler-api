@@ -1,0 +1,10 @@
+[
+  {
+    "id": 1,
+    "first_name": "Gokul",
+    "last_name": "Suthar",
+    "password": "123Suthar",
+    "created_at": "2024-02-12",
+    "updated_at": "2024-02-12"
+  }
+]

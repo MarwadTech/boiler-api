@@ -1,0 +1,57 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/app/index",
+    "dev": "set NODE_ENV=development&&nodemon dist/app/index"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/lodash": "^4.14.202",
+    "@types/morgan": "^1.9.9",
+    "@types/multer": "^1.4.11",
+    "@types/node": "^20.11.19",
+    "@types/nodemailer": "^6.4.14",
+    "@types/uuid": "^9.0.8",
+    "@types/validator": "^13.11.9",
+    "babel-register": "^6.26.0",
+    "nodemon": "^3.0.3",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "express": "^4.18.2",
+    "express-validator": "^7.0.1",
+    "google-auth-library": "^9.6.3",
+    "jsonwebtoken": "^9.0.2",
+    "module-alias": "^2.2.3",
+    "moment": "^2.30.1",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.9.1",
+    "nodemailer": "^6.9.10",
+    "sequelize-cli": "^6.6.2",
+    "dotenv": "^16.4.4",
+    "sequelize-typescript": "^2.1.6",
+    "uuid": "^9.0.1",
+    "validator": "^13.11.0",
+    "winston": "^3.11.0"
+  },
+  "_moduleAliases": {
+    "@models": "dist/app/models",
+    "@handlers": "dist/app/handlers",
+    "@utils": "dist/app/utils",
+    "@services": "dist/app/services",
+    "@libs": "dist/app/libs",
+    "@middlewares": "dist/app/middlewares",
+    "@routers": "dist/app/routers",
+    "@validators": "dist/app/validators"
+  }
+}

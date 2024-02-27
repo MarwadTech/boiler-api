@@ -1,0 +1,7 @@
+playgournd
+node_modules
+public
+dist
+.env
+config.json
+logs.log
