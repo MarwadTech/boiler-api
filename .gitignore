@@ -5,3 +5,5 @@ dist
 .env
 config.json
 logs.log
+public.pem
+private.pem
