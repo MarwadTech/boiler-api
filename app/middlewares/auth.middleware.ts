@@ -1,11 +1,9 @@
 import { ApiError } from "@libs/responses";
 import { UserService } from "@services";
 import { NextFunction, Request, Response } from "express";
-import { promisify } from "util";
-import { catchAsync } from "@utils";
-import jwt from "jsonwebtoken";
+import { catchAsync, decodeToken } from "@utils";
 import _ from "lodash";
-import { IUser } from "app/models/user.model";
+import User from "app/models/user.model";
 
 class AuthMiddleware extends UserService {
   protect = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -27,9 +25,9 @@ class AuthMiddleware extends UserService {
       );
     }
 
-    const decode: any = await promisify(jwt.verify)(token);
+    const decode = decodeToken(token);
 
-    const user = await this.getById(decode.id, { throwError: false });
+    const user = await this.getById(decode.id);
 
     if (_.isEmpty(user)) {
       return next(
@@ -53,7 +51,7 @@ class AuthMiddleware extends UserService {
       );
     }
 
-    req.user = user as IUser;
+    req.user = user as User;
     next();
   });
 

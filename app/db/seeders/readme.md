@@ -1,3 +1,8 @@
+## consist seeders files
+
+eg. user.js
+
+```
 "use strict";
 const users = require("../data/users.json");
 
@@ -11,3 +16,5 @@ module.exports = {
     return queryInterface.bulkDelete("users", null, {});
   },
 };
+
+```

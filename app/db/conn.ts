@@ -34,6 +34,7 @@ export const connectDB = async () => {
     (await connection).query(`CREATE DATABASE IF NOT EXISTS ${DB_NAME}`);
     (await connection).connect();
     await sequelize.authenticate();
+    // this reflect models changes directlt into the database tables, basically no need to run migration
     await sequelize.sync({ alter: true });
     return sequelize;
   } catch (error) {

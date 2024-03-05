@@ -1,6 +1,5 @@
 import { User } from "@models";
 import { CommonService, Options } from "./common.service";
-import QueryProcessor from "@libs/QueryProcessor";
 import { ApiError } from "@libs/responses";
 import { Op } from "sequelize";
 import validator from "validator";
@@ -36,12 +35,7 @@ export class UserService extends CommonService<User> {
 
   protected getByPhoneNumber = async (phNum: string, options?: Options): Promise<User | null> => {
     const user = await this.get({ phone_number: phNum }, { ...options, throwError: false });
-    if (!user && options?.throwError) throw new ApiError(404, "Failed to fetch user", [{ field: "phone_number", message: `User not found by phone number ${phNum}` }]);
+    if (!user && !options?.throwError) throw new ApiError(404, "Failed to fetch user", [{ field: "phone_number", message: `User not found by phone number ${phNum}` }]);
     return user;
-  };
-
-  protected getAll = async (queryOptions: any): Promise<{ meta: any; list: any[] }> => {
-    let users = new QueryProcessor(User, queryOptions).filter().sort().limitFields().paginate();
-    return users.execute();
   };
 }

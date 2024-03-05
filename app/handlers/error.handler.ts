@@ -55,7 +55,7 @@ const sendErrorProd = (err: IResp, res: Response) => {
     };
     res.status(resp.code || 500).json(resp);
   } else {
-    console.error("ERROR 💥", err.name);
+    console.error("ERROR 💥", err);
     const resp: IResp = {
       code: err.code || 500,
       message: "Internal server error",

@@ -23,4 +23,5 @@ export default {
       return true;
     }),
   ],
+  crt_pass: [body("current_password").notEmpty().withMessage("Current password is required")],
 };

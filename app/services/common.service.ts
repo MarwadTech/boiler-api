@@ -1,3 +1,4 @@
+import { QueryProcessor } from "@libs";
 import { ApiError } from "@libs/responses";
 import { Model, ModelStatic } from "sequelize";
 
@@ -19,7 +20,7 @@ export interface Options {
  * Generic CommonService class
  */
 export class CommonService<T extends Model> {
-  protected model: ModelStatic<T>;
+  model: ModelStatic<T>;
 
   /**
    * Constructor to initialize the model.
@@ -34,9 +35,9 @@ export class CommonService<T extends Model> {
    * @param payload - The data to be used for creating the record.
    * @returns Promise - The created record.
    */
-  protected create = async (payload: any): Promise<T> => {
+  async create(payload: any): Promise<T> {
     return this.model.create(payload);
-  };
+  }
 
   /**
    * Method to retrieve a record by ID.
@@ -44,13 +45,13 @@ export class CommonService<T extends Model> {
    * @param options - Additional options such as whether to throw an error if record not found.
    * @returns Promise - The found record or null if not found.
    */
-  protected getById = async (id: string, options?: Options): Promise<T | null> => {
+  async getById(id: string, options?: Options): Promise<T | null> {
     const row = await this.model.findByPk(id);
     // If record not found and throwError is true, throw an error
-    if (!row && options?.throwError)
+    if (!row && !options?.throwError)
       throw new ApiError(404, `Failed to ${options?.operation || "fetch"} ${this.model.name.toLocaleLowerCase()}`, [{ field: "id", message: `${this.model.name} not found by id ${id}` }]);
     return row; // Return the found row or null
-  };
+  }
 
   /**
    * Method to update a record by ID.
@@ -59,7 +60,7 @@ export class CommonService<T extends Model> {
    * @param options - Additional options such as whether to throw an error if record not found.
    * @returns Promise - The updated record or null if not found.
    */
-  protected updateById = async (id: string, payload: any, options?: Options): Promise<T | null> => {
+  updateById = async (id: string, payload: any, options?: Options): Promise<T | null> => {
     const row = await this.getById(id, { ...options, operation: "update" });
     // If row found, update it with payload; otherwise, return null
     return row?.update(payload) || null;
@@ -71,7 +72,7 @@ export class CommonService<T extends Model> {
    * @param options - Additional options such as whether to throw an error if record not found.
    * @returns Promise - The deleted record or null if not found.
    */
-  protected deleteById = async (id: string, options?: Options): Promise<T | null> => {
+  deleteById = async (id: string, options?: Options): Promise<T | null> => {
     const row = await this.getById(id, { ...options, operation: "delete" });
     // If row found, delete it; otherwise, return null
     await row?.destroy();
@@ -84,7 +85,7 @@ export class CommonService<T extends Model> {
    * @param options - Additional options such as whether to throw an error if record not found.
    * @returns Promise - The found record or null if not found.
    */
-  protected get = async (filter: any, options?: Options): Promise<T | null> => {
+  get = async (filter: any, options?: Options): Promise<T | null> => {
     if (options?.scope) {
       var row = await this.model.scope(options.scope).findOne({ where: filter });
     } else {
@@ -94,4 +95,23 @@ export class CommonService<T extends Model> {
     if (!row && options?.throwError) throw new ApiError(404, `${this.model.name} not found`);
     return row; // Return the found row or null
   };
+
+  /**
+   * Method to retrieve a records in pagination.
+   * @param queryOptions - The filter criteria to be used for finding the record.
+   * @returns Promise - The found records in pagination.
+   */
+  getPaginated = async (queryOptions: any): Promise<{ meta: any; list: any[] }> => {
+    let records = new QueryProcessor(this.model, queryOptions).filter().sort().limitFields().paginate();
+    return records.execute();
+  };
+
+  /**
+   * Method to retrieve a records in pagination.
+   * @param queryOptions - The filter criteria to be used for finding the record.
+   * @returns Promise - The found records in pagination.
+   */
+  async getAll(filter?: any): Promise<T[]> {
+    return this.model.findAll({ where: filter });
+  }
 }
